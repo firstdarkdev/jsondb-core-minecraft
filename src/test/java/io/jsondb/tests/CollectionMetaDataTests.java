@@ -27,6 +27,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -112,7 +113,7 @@ public class CollectionMetaDataTests {
   @Test
   public void test_MetadataLoad_UsingBuilder() {
     JsonDBConfig dbConfig = new JsonDBConfig(dbFilesLocation, "io.jsondb.tests.model", cipher, false, null);
-    Map<String, CollectionMetaData> cmdMap = CollectionMetaData.builder(dbConfig);
+    Map<String, CollectionMetaData> cmdMap = CollectionMetaData.builder(dbConfig, new HashSet<>());
     CollectionMetaData cmd = cmdMap.get("instances");
     assertNotNull(cmd);
     assertEquals("1.0", cmd.getSchemaVersion());

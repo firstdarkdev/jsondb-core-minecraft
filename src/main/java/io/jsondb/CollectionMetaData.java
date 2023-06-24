@@ -32,8 +32,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.reflections.Reflections;
-
 import io.jsondb.annotation.Document;
 import io.jsondb.annotation.Id;
 import io.jsondb.annotation.Secret;
@@ -224,11 +222,12 @@ public class CollectionMetaData {
    * @param dbConfig the object that holds all the baseScanPackage and other settings.
    * @return A Map of collection classes/POJOs
    */
-  public static Map<String, CollectionMetaData> builder(JsonDBConfig dbConfig) {
+  public static Map<String, CollectionMetaData> builder(JsonDBConfig dbConfig, Set<Class<?>> tables) {
     Map<String, CollectionMetaData> collectionMetaData = new LinkedHashMap<String, CollectionMetaData>();
-    Reflections reflections = new Reflections(dbConfig.getBaseScanPackage());
-    Set<Class<?>> docClasses = reflections.getTypesAnnotatedWith(Document.class);
-    for (Class<?> c : docClasses) {
+    for (Class<?> c : tables) {
+      if (!c.isAnnotationPresent(Document.class))
+        continue;
+
       Document d = c.getAnnotation(Document.class);
       String collectionName = d.collection();
       String version = d.schemaVersion();

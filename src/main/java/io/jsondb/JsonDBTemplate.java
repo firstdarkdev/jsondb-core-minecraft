@@ -99,11 +99,14 @@ public class JsonDBTemplate implements JsonDBOperations {
       logger.info("Encryption is enabled for JSON DB");
       this.encrypted = true;
     }
-    initialize();
+  }
+
+  public void setupDB(Set<Class<?>> tables) {
+    initialize(tables);
     eventListenerList = new EventListenerList(dbConfig, cmdMap);
   }
 
-  private void initialize(){
+  private void initialize(Set<Class<?>> tables) {
     this.lockFilesLocation = new File(dbConfig.getDbFilesLocation(), "lock");
     if(!lockFilesLocation.exists()) {
       lockFilesLocation.mkdirs();
@@ -119,7 +122,7 @@ public class JsonDBTemplate implements JsonDBOperations {
       throw new InvalidJsonDbApiUsageException("Specified DbFiles directory is actually a file cannot use it as a directory");
     }
 
-    cmdMap = CollectionMetaData.builder(dbConfig);
+    cmdMap = CollectionMetaData.builder(dbConfig, tables);
 
     loadDB();
 
