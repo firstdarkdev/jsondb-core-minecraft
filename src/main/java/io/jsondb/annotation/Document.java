@@ -20,19 +20,16 @@
  */
 package io.jsondb.annotation;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * @version 1.0 25-Sep-2016
  */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE })
+@Target({ElementType.TYPE})
 public @interface Document {
-  String collection();
-  String schemaVersion();
+    String collection();
+
+    String schemaVersion();
 }

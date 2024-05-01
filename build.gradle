@@ -19,20 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 plugins {
-    //id 'net.saliman.cobertura' version '2.3.1'
-    id 'jacoco'
-    id 'com.github.kt3k.coveralls' version '2.6.3'
-    id 'idea'
+  id 'java'
+  id 'idea'
+  id 'maven-publish'
 }
 
-apply plugin: "java"
-apply plugin: "jacoco"
-apply plugin: "eclipse"
-apply plugin: "signing"
-apply plugin: "maven"
-
 description = 'A pure java JSON based database.'
-group = 'io.jsondb'
+group = 'com.hypherionmc.jsondb'
 version = getVersionName()
 
 ext {
@@ -44,64 +37,26 @@ repositories {
 }
 
 dependencies {
-  compile "org.slf4j:slf4j-api:1.7.21",
-          "com.fasterxml.jackson.core:jackson-annotations:2.9.9",
-          "com.fasterxml.jackson.core:jackson-core:2.9.9",
-          "com.fasterxml.jackson.core:jackson-databind:2.9.9",
-          "com.fasterxml.jackson.module:jackson-module-parameter-names:2.9.9",
-          "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.9",
-          "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.9",
-          "org.javassist:javassist:3.20.0-GA",
+  implementation "org.slf4j:slf4j-api:${slf4j_api}",
+          "com.fasterxml.jackson.core:jackson-annotations:${jackson}",
+          "com.fasterxml.jackson.core:jackson-core:${jackson}",
+          "com.fasterxml.jackson.core:jackson-databind:${jackson}",
+          "com.fasterxml.jackson.module:jackson-module-parameter-names:${jackson}",
+          "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${jackson}",
+          "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson}",
+          "org.javassist:javassist:${javassist}",
           "commons-jxpath:commons-jxpath:1.3",
-          "com.google.guava:guava:19.0",
-          "commons-beanutils:commons-beanutils:1.9.3"
-
-  testCompile "junit:junit:4.12",
-          "org.hamcrest:hamcrest-library:1.3",
-          "org.springframework:spring-beans:4.3.3.RELEASE",
-          "org.springframework:spring-test:4.3.3.RELEASE"
+          "com.google.guava:guava:${guava}",
+          "commons-beanutils:commons-beanutils:${commons_beanutils}"
 }
-
-//cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report
-
-jacocoTestReport {
-    reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
-    }
-}
-
-eclipse {
-  project {
-    name = "${project.name}"
-  }
-}
-
-eclipseJdt {
-  inputFile = file("${rootDir}/buildsupport/eclipsesupport/settings/org.eclipse.jdt.core.prefs")
-  doLast {
-    copy {
-      from "${rootDir}/buildsupport/eclipsesupport/settings/org.eclipse.jdt.ui.prefs"
-      into "${projectDir}/.settings"
-      fileMode 0644
-    }
-  }
-}
-
-cleanEclipseJdt {
-  doFirst {
-    delete "${projectDir}/.settings"
-  }
-}
-tasks.eclipse.dependsOn(cleanEclipse)
 
 task javadocJar(type: Jar) {
-  classifier = 'javadoc'
+  //classifier = 'javadoc'
   from javadoc
 }
 
 task sourcesJar(type: Jar) {
-  classifier = 'sources'
+  //classifier = 'sources'
   from sourceSets.main.allSource
 }
 
@@ -109,60 +64,62 @@ artifacts {
   archives javadocJar, sourcesJar
 }
 
-signing {
-  required { gradle.taskGraph.hasTask("uploadArchives") }
-  sign configurations.archives
-}
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
 
-uploadArchives {
-  //How to publish to MavenCentral: http://weibeld.net/java/publish-to-maven-central.html
-  repositories {
-    mavenDeployer {
-      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+      // Define the coordinates and metadata for the publication
+      artifactId = 'jsondb-core'
+      version = getVersion()
 
-      repository(url: "https://maven.firstdarkdev.xyz/releases") {
-        authentication(userName: System.getenv("MAVEN_USER"), password: System.getenv("MAVEN_PASS"))
-      }
+      // Optionally, you can customize the pom
+      pom {
+        name = 'jsondb-core'
+        packaging = 'jar'
+        description = 'A pure java JSON based database.'
+        url = 'http://www.jsondb.io'
 
-      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-        authentication(userName: OSSRH_USERNAME, password: OSSRH_PASSWORD)
-      }
-
-      pom.project {
-        name 'jsondb-core'
-        packaging 'jar'
-        // optionally artifactId can be defined here 
-        description 'A pure java JSON based database.'
-        url 'http://www.jsondb.io'
-
+        // SCM configuration
         scm {
-          connection 'scm:git:https://github.com/Jsondb/jsondb-core.git'
-          developerConnection 'scm:git:https://github.com/Jsondb/jsondb-core.git'
-          url 'scm:git:https://github.com/Jsondb/jsondb-core.git'
+          url = 'https://github.com/Jsondb/jsondb-core'
+          connection = 'scm:git:https://github.com/Jsondb/jsondb-core.git'
+          developerConnection = 'scm:git:https://github.com/Jsondb/jsondb-core.git'
         }
 
+        // License configuration
         licenses {
           license {
-            name 'MIT License'
-            url 'https://opensource.org/licenses/MIT'
+            name = 'MIT License'
+            url = 'https://opensource.org/licenses/MIT'
           }
         }
 
+        // Developer information
         developers {
           developer {
-            id 'FarooqKhan'
-            name 'Farooq Khan'
-            email 'FarooqKhan@users.noreply.github.com'
+            id = 'FarooqKhan'
+            name = 'Farooq Khan'
+            email = 'FarooqKhan@users.noreply.github.com'
           }
         }
       }
     }
   }
+
+  // Define the repository to publish to
+  repositories {
+    maven {
+      url = uri('https://maven.firstdarkdev.xyz/releases')
+      credentials {
+        username = System.getenv("MAVEN_USER")
+        password = System.getenv("MAVEN_PASS")
+      }
+    }
+  }
 }
 
-/*
- * Gets the version name from the latest Git tag
- */
-def getVersionName() {
-  return "1.0.2c";
+
+static def getVersionName() {
+  return "1.1.0"
 }

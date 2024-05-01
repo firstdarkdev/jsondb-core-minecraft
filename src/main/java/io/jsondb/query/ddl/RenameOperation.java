@@ -24,21 +24,21 @@ import io.jsondb.query.ddl.CollectionSchemaUpdate.Type;
 
 /**
  * Represents a CollectionUpdate RENAME operation type.
- * 
+ * <p>
  * This operation allows for changing the name of a field in a POJO
  *
  * @author Farooq Khan
  * @version 1.0 21 Aug 2016
  */
 public class RenameOperation extends AbstractOperation {
-  private String newName;
+    private final String newName;
 
-  public RenameOperation(String newName) {
-    this.operationType = Type.RENAME;
-    this.newName = newName;
-  }
+    public RenameOperation(String newName) {
+        this.operationType = Type.RENAME;
+        this.newName = newName;
+    }
 
-  public String getNewName() {
-    return newName;
-  }
+    public String getNewName() {
+        return newName;
+    }
 }

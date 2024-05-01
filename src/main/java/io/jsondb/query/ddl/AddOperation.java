@@ -24,27 +24,27 @@ import io.jsondb.query.ddl.CollectionSchemaUpdate.Type;
 
 /**
  * Represents a CollectionUpdate ADD operation type.
- *
+ * <p>
  * This operation allows for adding a new field to a POJO
- * 
+ *
  * @author Farooq Khan
  * @version 1.0 21 Aug 2016
  */
 public class AddOperation extends AbstractOperation {
-  private Object defaultValue;
-  private boolean isSecret;
+    private final Object defaultValue;
+    private final boolean isSecret;
 
-  public AddOperation(Object defaultValue, boolean isSecret) {
-    this.operationType = Type.ADD;
-    this.defaultValue = defaultValue;
-    this.isSecret = isSecret;
-  }
+    public AddOperation(Object defaultValue, boolean isSecret) {
+        this.operationType = Type.ADD;
+        this.defaultValue = defaultValue;
+        this.isSecret = isSecret;
+    }
 
-  public Object getDefaultValue() {
-    return defaultValue;
-  }
+    public Object getDefaultValue() {
+        return defaultValue;
+    }
 
-  public boolean isSecret() {
-    return isSecret;
-  }
+    public boolean isSecret() {
+        return isSecret;
+    }
 }

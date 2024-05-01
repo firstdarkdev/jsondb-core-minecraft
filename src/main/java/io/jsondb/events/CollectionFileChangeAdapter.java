@@ -24,7 +24,7 @@ package io.jsondb.events;
  * An abstract adapter class for receiving Collection File Change events.
  * The methods in this class are empty.
  * This class exists as convenience for creating listener objects.
- *
+ * <p>
  * Extend this class to create a Collection File Change listener and override only the methods for
  * the events of interest. (If you implement the CollectionFileChangeListener interface, you have to
  * define all of the methods in it. This abstract class defines null methods for them all, so you
@@ -35,13 +35,16 @@ package io.jsondb.events;
  */
 public abstract class CollectionFileChangeAdapter implements CollectionFileChangeListener {
 
-  @Override
-  public void collectionFileAdded(String collectionName) {  }
+    @Override
+    public void collectionFileAdded(String collectionName) {
+    }
 
-  @Override
-  public void collectionFileDeleted(String collectionName) {  }
+    @Override
+    public void collectionFileDeleted(String collectionName) {
+    }
 
-  @Override
-  public void collectionFileModified(String collectionName) {  }
+    @Override
+    public void collectionFileModified(String collectionName) {
+    }
 
 }

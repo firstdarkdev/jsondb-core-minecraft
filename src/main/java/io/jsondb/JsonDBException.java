@@ -25,13 +25,13 @@ package io.jsondb;
  */
 public class JsonDBException extends RuntimeException {
 
-  private static final long serialVersionUID = -1397228179744504376L;
+    private static final long serialVersionUID = -1397228179744504376L;
 
-  public JsonDBException(String msg) {
-    super(msg);
-  }
+    public JsonDBException(String msg) {
+        super(msg);
+    }
 
-  public JsonDBException(String msg, Throwable cause) {
-    super(msg, cause);
-  }
+    public JsonDBException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

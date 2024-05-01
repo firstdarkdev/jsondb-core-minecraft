@@ -24,14 +24,14 @@ import io.jsondb.query.ddl.CollectionSchemaUpdate.Type;
 
 /**
  * Represents a CollectionUpdate DELETE operation type.
- *
+ * <p>
  * This operation allows for deleting a field from a POJO
  *
  * @author Farooq Khan
  * @version 1.0 21 Aug 2016
  */
 public class DeleteOperation extends AbstractOperation {
-  public DeleteOperation() {
-    this.operationType = Type.DELETE;
-  }
+    public DeleteOperation() {
+        this.operationType = Type.DELETE;
+    }
 }

@@ -25,20 +25,21 @@ package io.jsondb;
  * @version 1.0 25-Sep-2016
  */
 public class SchemaVersion {
-  private String schemaVersion;
+    private String schemaVersion;
 
-  //Default constructor required for Jackson
-  public SchemaVersion() { }
+    //Default constructor required for Jackson
+    public SchemaVersion() {
+    }
 
-  public SchemaVersion(String schemaVersion) {
-    this.schemaVersion = schemaVersion;
-  }
+    public SchemaVersion(String schemaVersion) {
+        this.schemaVersion = schemaVersion;
+    }
 
-  public String getSchemaVersion() {
-    return schemaVersion;
-  }
+    public String getSchemaVersion() {
+        return schemaVersion;
+    }
 
-  public void setSchemaVersion(String schemaVersion) {
-    this.schemaVersion = schemaVersion;
-  }
+    public void setSchemaVersion(String schemaVersion) {
+        this.schemaVersion = schemaVersion;
+    }
 }

@@ -27,5 +27,5 @@ import io.jsondb.query.ddl.CollectionSchemaUpdate.Type;
  * @version 1.0 21 Aug 2016
  */
 public interface IOperation {
-  Type getOperationType();
+    Type getOperationType();
 }

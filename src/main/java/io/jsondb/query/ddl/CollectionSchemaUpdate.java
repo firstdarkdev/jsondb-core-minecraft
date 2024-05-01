@@ -30,95 +30,95 @@ import java.util.TreeMap;
  */
 public class CollectionSchemaUpdate {
 
-  public enum Type {ADD, RENAME, DELETE};
+    public enum Type {ADD, RENAME, DELETE}
 
-  private Map<String, IOperation> collectionUpdateData;
+    private final Map<String, IOperation> collectionUpdateData;
 
-  public CollectionSchemaUpdate() {
-    collectionUpdateData = new TreeMap<String, IOperation>();
-  }
+    public CollectionSchemaUpdate() {
+        collectionUpdateData = new TreeMap<>();
+    }
 
-  /**
-   * Static factory method to create an CollectionUpdate for the specified key
-   *
-   * @param key: JSON attribute to update
-   * @param operation: operation to carry out on the attribute
-   * @return  the updated CollectionSchemaUpdate
-   */
-  public static CollectionSchemaUpdate update(String key, IOperation operation) {
-    return new CollectionSchemaUpdate().set(key, operation);
-  }
+    /**
+     * Static factory method to create an CollectionUpdate for the specified key
+     *
+     * @param key:       JSON attribute to update
+     * @param operation: operation to carry out on the attribute
+     * @return the updated CollectionSchemaUpdate
+     */
+    public static CollectionSchemaUpdate update(String key, IOperation operation) {
+        return new CollectionSchemaUpdate().set(key, operation);
+    }
 
-  /**
-   * A method to set a new Operation for a key. It may be of type ADD, RENAME or DELETE.
-   * Only one operation per key can be specified. Attempt to add a second operation for a any key will override the first one.
-   * Attempt to add a ADD operation for a key which already exists will have no effect.
-   * Attempt to add a DELETE operation for akey which does not exist will have no effect.
-   *
-   * @param key (a.k.a JSON Field name) for which operation is being added
-   * @param operation  operation to perform
-   * @return  the updated CollectionSchemaUpdate
-   */
-  public CollectionSchemaUpdate set(String key, IOperation operation) {
-    collectionUpdateData.put(key, operation);
-    return this;
-  }
+    /**
+     * A method to set a new Operation for a key. It may be of type ADD, RENAME or DELETE.
+     * Only one operation per key can be specified. Attempt to add a second operation for a any key will override the first one.
+     * Attempt to add a ADD operation for a key which already exists will have no effect.
+     * Attempt to add a DELETE operation for akey which does not exist will have no effect.
+     *
+     * @param key       (a.k.a JSON Field name) for which operation is being added
+     * @param operation operation to perform
+     * @return the updated CollectionSchemaUpdate
+     */
+    public CollectionSchemaUpdate set(String key, IOperation operation) {
+        collectionUpdateData.put(key, operation);
+        return this;
+    }
 
-  public Map<String, IOperation> getUpdateData() {
-    return collectionUpdateData;
-  }
+    public Map<String, IOperation> getUpdateData() {
+        return collectionUpdateData;
+    }
 
-  /**
-   * Returns a Map of ADD operations which have a non-null default value specified.
-   * 
-   * @return Map of ADD operations which have a non-null  default value specified
-   */
-  public Map<String, AddOperation> getAddOperations() {
-    Map<String, AddOperation> addOperations = new TreeMap<String, AddOperation>();
-    for (Entry<String, IOperation> entry : collectionUpdateData.entrySet()) {
-      String key = entry.getKey();
-      IOperation op = entry.getValue();
-      if (op.getOperationType().equals(Type.ADD)) {
-        AddOperation aop = (AddOperation)op;
-        if (null != aop.getDefaultValue()) {
-          addOperations.put(key, aop);
+    /**
+     * Returns a Map of ADD operations which have a non-null default value specified.
+     *
+     * @return Map of ADD operations which have a non-null  default value specified
+     */
+    public Map<String, AddOperation> getAddOperations() {
+        Map<String, AddOperation> addOperations = new TreeMap<>();
+        for (Entry<String, IOperation> entry : collectionUpdateData.entrySet()) {
+            String key = entry.getKey();
+            IOperation op = entry.getValue();
+            if (op.getOperationType().equals(Type.ADD)) {
+                AddOperation aop = (AddOperation) op;
+                if (null != aop.getDefaultValue()) {
+                    addOperations.put(key, aop);
+                }
+            }
         }
-      }
+        return addOperations;
     }
-    return addOperations;
-  }
 
-  /**
-   * Returns a Map of RENAME operations.
-   * 
-   * @return Map of RENAME operations which have a non-null  default value specified
-   */
-  public Map<String, RenameOperation> getRenameOperations() {
-    Map<String, RenameOperation> renOperations = new TreeMap<String, RenameOperation>();
-    for (Entry<String, IOperation> entry : collectionUpdateData.entrySet()) {
-      String key = entry.getKey();
-      IOperation op = entry.getValue();
-      if (op.getOperationType().equals(Type.RENAME)) {
-        renOperations.put(key, (RenameOperation)op);
-      }
+    /**
+     * Returns a Map of RENAME operations.
+     *
+     * @return Map of RENAME operations which have a non-null  default value specified
+     */
+    public Map<String, RenameOperation> getRenameOperations() {
+        Map<String, RenameOperation> renOperations = new TreeMap<>();
+        for (Entry<String, IOperation> entry : collectionUpdateData.entrySet()) {
+            String key = entry.getKey();
+            IOperation op = entry.getValue();
+            if (op.getOperationType().equals(Type.RENAME)) {
+                renOperations.put(key, (RenameOperation) op);
+            }
+        }
+        return renOperations;
     }
-    return renOperations;
-  }
 
-  /**
-   * Returns a Map of DELETE operations.
-   * 
-   * @return Map of DELETE operations which have a non-null  default value specified
-   */
-  public Map<String, DeleteOperation> getDeleteOperations() {
-    Map<String, DeleteOperation> delOperations = new TreeMap<String, DeleteOperation>();
-    for (Entry<String, IOperation> entry : collectionUpdateData.entrySet()) {
-      String key = entry.getKey();
-      IOperation op = entry.getValue();
-      if (op.getOperationType().equals(Type.DELETE)) {
-        delOperations.put(key, (DeleteOperation)op);
-      }
+    /**
+     * Returns a Map of DELETE operations.
+     *
+     * @return Map of DELETE operations which have a non-null  default value specified
+     */
+    public Map<String, DeleteOperation> getDeleteOperations() {
+        Map<String, DeleteOperation> delOperations = new TreeMap<>();
+        for (Entry<String, IOperation> entry : collectionUpdateData.entrySet()) {
+            String key = entry.getKey();
+            IOperation op = entry.getValue();
+            if (op.getOperationType().equals(Type.DELETE)) {
+                delOperations.put(key, (DeleteOperation) op);
+            }
+        }
+        return delOperations;
     }
-    return delOperations;
-  }
 }

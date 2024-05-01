@@ -20,116 +20,114 @@
  */
 package io.jsondb;
 
-import java.io.File;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
-import java.util.Comparator;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import io.jsondb.crypto.ICipher;
+
+import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.util.Comparator;
 
 /**
  * A POJO that has settings for the functioning of DB.
+ *
  * @author Farooq Khan
  * @version 1.0 25-Sep-2016
  */
 public class JsonDBConfig {
-  //Settings
-  private Charset charset;
-  private String dbFilesLocationString;
-  private File dbFilesLocation;
-  private Path dbFilesPath;
-  private String baseScanPackage;
-  private ICipher cipher;
-  private boolean compatibilityMode;
+    //Settings
+    private Charset charset;
+    private String dbFilesLocationString;
+    private File dbFilesLocation;
+    private Path dbFilesPath;
+    private String baseScanPackage;
+    private boolean compatibilityMode;
 
-  //References
-  private ObjectMapper objectMapper;
-  private Comparator<String> schemaComparator;
+    //References
+    private ObjectMapper objectMapper;
+    private final Comparator<String> schemaComparator;
 
-  public JsonDBConfig(String dbFilesLocationString, String baseScanPackage,
-      ICipher cipher, boolean compatibilityMode, Comparator<String> schemaComparator) {
+    public JsonDBConfig(String dbFilesLocationString, String baseScanPackage, boolean compatibilityMode, Comparator<String> schemaComparator) {
 
-    this.charset = Charset.forName("UTF-8");
-    this.dbFilesLocationString = dbFilesLocationString;
-    this.dbFilesLocation = new File(dbFilesLocationString);
-    this.dbFilesPath = dbFilesLocation.toPath();
-    this.baseScanPackage = baseScanPackage;
-    this.cipher = cipher;
+        this.charset = StandardCharsets.UTF_8;
+        this.dbFilesLocationString = dbFilesLocationString;
+        this.dbFilesLocation = new File(dbFilesLocationString);
+        this.dbFilesPath = dbFilesLocation.toPath();
+        this.baseScanPackage = baseScanPackage;
 
-    this.compatibilityMode = compatibilityMode;
-    this.objectMapper = new ObjectMapper()
-            .registerModule(new ParameterNamesModule())
-            .registerModule(new Jdk8Module())
-            .registerModule(new JavaTimeModule());
+        this.compatibilityMode = compatibilityMode;
+        this.objectMapper = new ObjectMapper()
+                .registerModule(new ParameterNamesModule())
+                .registerModule(new Jdk8Module())
+                .registerModule(new JavaTimeModule());
 
-    if (compatibilityMode) {
-      objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        if (compatibilityMode) {
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        }
+
+        if (null == schemaComparator) {
+            this.schemaComparator = new DefaultSchemaVersionComparator();
+        } else {
+            this.schemaComparator = schemaComparator;
+        }
     }
 
-    if (null == schemaComparator) {
-      this.schemaComparator = new DefaultSchemaVersionComparator();
-    } else {
-      this.schemaComparator = schemaComparator;
+    public Charset getCharset() {
+        return charset;
     }
-  }
 
-  public Charset getCharset() {
-    return charset;
-  }
-  public void setCharset(Charset charset) {
-    this.charset = charset;
-  }
-  public String getDbFilesLocationString() {
-    return dbFilesLocationString;
-  }
-  public void setDbFilesLocationString(String dbFilesLocationString) {
-    this.dbFilesLocationString = dbFilesLocationString;
-    this.dbFilesLocation = new File(dbFilesLocationString);
-    this.dbFilesPath = dbFilesLocation.toPath();
-  }
-  public File getDbFilesLocation() {
-    return dbFilesLocation;
-  }
-  public Path getDbFilesPath() {
-    return dbFilesPath;
-  }
-
-  public String getBaseScanPackage() {
-    return baseScanPackage;
-  }
-  public void setBaseScanPackage(String baseScanPackage) {
-    this.baseScanPackage = baseScanPackage;
-  }
-  public ICipher getCipher() {
-    return cipher;
-  }
-  public void setCipher(ICipher cipher) {
-    this.cipher = cipher;
-  }
-  public boolean isCompatibilityMode() {
-    return compatibilityMode;
-  }
-  public void setCompatibilityMode(boolean compatibilityMode) {
-    this.compatibilityMode = compatibilityMode;
-    if (compatibilityMode) {
-      objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    } else {
-      objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+    public void setCharset(Charset charset) {
+        this.charset = charset;
     }
-  }
-  public ObjectMapper getObjectMapper() {
-    return objectMapper;
-  }
-  public void setObjectMapper(ObjectMapper objectMapper) {
-    this.objectMapper = objectMapper;
-  }
-  public Comparator<String> getSchemaComparator() {
-    return schemaComparator;
-  }
+
+    public String getDbFilesLocationString() {
+        return dbFilesLocationString;
+    }
+
+    public void setDbFilesLocationString(String dbFilesLocationString) {
+        this.dbFilesLocationString = dbFilesLocationString;
+        this.dbFilesLocation = new File(dbFilesLocationString);
+        this.dbFilesPath = dbFilesLocation.toPath();
+    }
+
+    public File getDbFilesLocation() {
+        return dbFilesLocation;
+    }
+
+    public Path getDbFilesPath() {
+        return dbFilesPath;
+    }
+
+    public String getBaseScanPackage() {
+        return baseScanPackage;
+    }
+
+    public void setBaseScanPackage(String baseScanPackage) {
+        this.baseScanPackage = baseScanPackage;
+    }
+
+    public boolean isCompatibilityMode() {
+        return compatibilityMode;
+    }
+
+    public void setCompatibilityMode(boolean compatibilityMode) {
+        this.compatibilityMode = compatibilityMode;
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, !compatibilityMode);
+    }
+
+    public ObjectMapper getObjectMapper() {
+        return objectMapper;
+    }
+
+    public void setObjectMapper(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
+    public Comparator<String> getSchemaComparator() {
+        return schemaComparator;
+    }
 }

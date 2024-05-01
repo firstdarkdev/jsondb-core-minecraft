@@ -27,8 +27,9 @@ import io.jsondb.query.ddl.CollectionSchemaUpdate.Type;
  * @version 1.0 21 Aug 2016
  */
 public abstract class AbstractOperation implements IOperation {
-  protected Type operationType;
-  public Type getOperationType() {
-    return operationType;
-  }
+    protected Type operationType;
+
+    public Type getOperationType() {
+        return operationType;
+    }
 }

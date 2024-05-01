@@ -29,29 +29,29 @@ import java.util.TreeMap;
  */
 public class Update {
 
-  private Map<String, Object> updateData;
+    private final Map<String, Object> updateData;
 
-  public Update() {
-    updateData = new TreeMap<String, Object>();
-  }
+    public Update() {
+        updateData = new TreeMap<>();
+    }
 
-  /**
-   * Static factory method to create an Update using the provided key
-   *
-   * @param key the field name for the update operation
-   * @param value  the value to set for the field
-   * @return  Updated object
-   */
-  public static Update update(String key, Object value) {
-    return new Update().set(key, value);
-  }
+    /**
+     * Static factory method to create an Update using the provided key
+     *
+     * @param key   the field name for the update operation
+     * @param value the value to set for the field
+     * @return Updated object
+     */
+    public static Update update(String key, Object value) {
+        return new Update().set(key, value);
+    }
 
-  public Update set(String key, Object value) {
-    updateData.put(key, value);
-    return this;
-  }
+    public Update set(String key, Object value) {
+        updateData.put(key, value);
+        return this;
+    }
 
-  public Map<String, Object> getUpdateData() {
-    return updateData;
-  }
+    public Map<String, Object> getUpdateData() {
+        return updateData;
+    }
 }
